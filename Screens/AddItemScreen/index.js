@@ -2,7 +2,7 @@ import React, {useState, useLayoutEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, StyleSheet, TouchableOpacity, Text, TextInput} from 'react-native';
 import { productsSelector, setProducts } from '../../Redux/Slices/appSlice';
-import {setDoc, doc} from 'firebase/firestore'
+import {addDoc, collection} from 'firebase/firestore'
 import db from '../../firebase/firebase';
 
 const AddItemScreen = ({navigation}) => {
@@ -23,7 +23,7 @@ const AddItemScreen = ({navigation}) => {
   const addItem = async ()=>{
     if(productName !== ''){
       // dispatch(setProducts({productName, productPrice}))
-      await setDoc(doc(db, "products", productName), {
+      await addDoc(collection(db, "products"), {
         productName,
         productPrice
       });
