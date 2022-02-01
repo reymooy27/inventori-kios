@@ -5,24 +5,17 @@ import db from '../../firebase/firebase';
 
 
 const ItemDetailsScreen = ({route, navigation}) => {
-  const {itemName} = route.params
+  const {id} = route.params
 
   const [item, setItem] = useState({});
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: itemName,
-      headerTitleAlign: 'center',
-    })
-
-  }, [navigation])
-
   useEffect(() => {
     const unsub = async ()=>{
-      const docRef = doc(db, "products", itemName);
+      const docRef = doc(db, "products", id);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setItem(docSnap.data())
+        let id = docSnap.id
+        setItem({id,...docSnap.data()})
       }
     }
     unsub()
@@ -30,15 +23,25 @@ const ItemDetailsScreen = ({route, navigation}) => {
     return ()=> unsub()
   }, [])
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: item?.productName,
+      headerTitleAlign: 'center',
+    })
+
+  }, [navigation, item?.productName])
+
+  console.log(item)
+
   const deleteItem = async ()=>{
-    await deleteDoc(doc(db, "products", itemName));
+    await deleteDoc(doc(db, "products", id));
     navigation.navigate('HomeScreen')
   }
 
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>{itemName}</Text>
+      <Text>{item?.productName}</Text>
       <TouchableOpacity onPress={deleteItem}>
         <Text>Delete Item</Text>
       </TouchableOpacity>
