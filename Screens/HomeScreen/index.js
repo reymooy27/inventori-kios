@@ -1,11 +1,8 @@
 import React, {useLayoutEffect, useState,useEffect} from 'react';
 import {TextInput,View, StyleSheet, Text, TouchableOpacity, FlatList, } from 'react-native';
 import Items from '../../Components/Items';
-import {useSelector} from 'react-redux';
-import {productsSelector} from '../../Redux/Slices/appSlice'
 import db from '../../firebase/firebase'
-import { collection, getDocs } from "firebase/firestore"; 
-import {doc, setDoc, onSnapshot } from "firebase/firestore"; 
+import {collection, onSnapshot } from "firebase/firestore"; 
 
 const HomeScreen = ({navigation}) => {
 
@@ -16,12 +13,16 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "products"), (doc) => {
-    const data = doc.docs.map((dc) => dc.data());
+      const data = doc.docs.map((dc) => {
+        let d = dc.data()
+        let id = dc.id
+        return{id,...d}
+      });
     setProducts(data)
     setfullData(data)
     }); 
 
-    return ()=> unsub()
+    unsub()
   }, [])
   
   useLayoutEffect(() => {
@@ -54,7 +55,10 @@ const HomeScreen = ({navigation}) => {
   }
 
 const renderItem = ({item})=> (
-    <Items onPress={()=> navigation.navigate("ItemDetailsScreen", {itemName: item?.productName})} name={item.productName}/>
+    <Items onPress={()=> navigation.navigate("ItemDetailsScreen", {id: item?.id})} 
+    name={item?.productName}
+    price={item?.productPrice}
+    />
   )
 
   return (
