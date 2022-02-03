@@ -22,7 +22,7 @@ const HomeScreen = ({navigation}) => {
     setfullData(data)
     }); 
 
-    unsub()
+    return ()=> unsub()
   }, [])
   
   useLayoutEffect(() => {
