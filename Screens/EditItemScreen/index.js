@@ -33,19 +33,23 @@ const EditItemScreen = ({navigation, route}) => {
   return (
     <View style={{flex: 1, alignItems: "center"}}>
       <TextInput 
-        style={{width: '90%', padding: 10, borderWidth: 2, borderColor: 'black', marginVertical: 10, borderRadius: 10}} 
+        style={{width: '90%', padding: 10, borderWidth: 2, 
+                borderColor: 'black', marginVertical: 10, borderRadius: 10}} 
         value={initialState?.productName} 
         onChangeText={(text)=> setInitialState({...initialState,...{productName: text}})}
         placeholder='Product Name'/>
       <TextInput 
-        style={{width: '90%', padding: 10, borderWidth: 2, borderColor: 'black', marginVertical: 10, borderRadius: 10}} 
+        style={{width: '90%', padding: 10, borderWidth: 2, 
+                borderColor: 'black', marginVertical: 10, borderRadius: 10}} 
         value={`${initialState?.productPrice}`} 
         onChangeText={(text)=> setInitialState({...initialState,...{productPrice: text}})}
         placeholder='PRoduct Price' keyboardType='number-pad'/>
-        <TouchableOpacity onPress={submit}>
-          <Text>
-            Done
-          </Text>
+        <TouchableOpacity 
+          style={{width: '90%', height: 50, backgroundColor: 'red', 
+                  position: "absolute", bottom: 20, borderRadius: 10, 
+                  justifyContent: 'center', alignItems: 'center'}}
+          onPress={submit}>
+          <Text>Done</Text>
         </TouchableOpacity>
     </View>
   );
